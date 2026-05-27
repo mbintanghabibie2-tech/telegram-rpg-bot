@@ -1,20 +1,13 @@
-import supabase
-from '../database/supabase.js'
+import supabase from '../database/supabase.js'
 
-const waitingRegister =
-new Set()
+const waitingRegister = new Set()
 
-// BUTTON REGISTER 😭🔥
-export async function registerCommand(
-ctx
-) {
+// COMMAND REGISTER
+export async function registerCommand(ctx) {
 
-const userId =
-ctx.from.id
+const userId = ctx.from.id
 
-waitingRegister.add(
-userId
-)
+waitingRegister.add(userId)
 
 await ctx.reply(
 
@@ -28,104 +21,67 @@ tanpa spasi`
 
 }
 
-// BUAT PLAYER 😭🔥
+// CREATE PLAYER
 export async function createPlayer(
-
 ctx,
 nickname
-
 ) {
 
-const userId =
-ctx.from.id
+const userId = ctx.from.id
 
-const username =
-ctx.from.username
+const username = ctx.from.username
 ? `@${ctx.from.username}`
 : '@ belum pasang username'
 
-// CEK SUDAH DAFTAR 😭🔥
-const {
-data:
-existing
-}
-=
+// CEK SUDAH ADA
+const { data: existing } =
 await supabase
-
 .from('players')
-
 .select('*')
-
-.eq(
-'telegram_id',
-userId
-)
-
+.eq('telegram_id', userId)
 .single()
 
-if(
-existing
-) {
+if (existing) {
 
 return ctx.reply(
-
 'kamu sudah terdaftar'
-
 )
 
 }
 
-// CEK NICKNAME 😭🔥
-const {
-data:
-sameName
-}
-=
+// CEK NICKNAME
+const { data: sameName } =
 await supabase
-
 .from('players')
-
 .select('*')
-
-.eq(
-'nickname',
-nickname
-)
-
+.eq('nickname', nickname)
 .single()
 
-if(
-sameName
-) {
+if (sameName) {
 
 return ctx.reply(
-
 'nickname sudah dipakai'
-
 )
 
 }
 
-// INSERT PLAYER 😭🔥
+// INSERT
 await supabase
-
 .from('players')
-
 .insert({
 
-telegram_id:
-userId,
-
+telegram_id: userId,
 nickname,
-
-username
+username,
+level: 1,
+gold: 100,
+health: 100,
+mana: 50
 
 })
 
-// HAPUS DARI WAITING 😭🔥
-waitingRegister.delete(
-userId
-)
+// HAPUS WAITING
+waitingRegister.delete(userId)
 
 }
 
