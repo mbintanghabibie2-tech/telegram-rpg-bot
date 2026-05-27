@@ -5,7 +5,7 @@ ctx
 const msg =
 await ctx.reply(
 
-`░░░░░░░░░░ 0%`
+'░░░░░░░░░░ 0%'
 
 )
 
@@ -26,7 +26,7 @@ of steps
 
 await new Promise(
 r =>
-setTimeout(r, 800)
+setTimeout(r, 700)
 )
 
 await ctx.api.editMessageText(
