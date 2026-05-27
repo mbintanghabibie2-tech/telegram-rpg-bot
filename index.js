@@ -7,13 +7,21 @@ from 'dotenv'
 import {
 startCommand
 }
-
 from './commands/start.js'
 
 import {
 registerCommand
 }
+from './commands/register.js'
 
+import {
+waitingRegister 
+}
+from './commands/register.js'
+
+import {
+loading
+}
 from './commands/register.js'
 
 dotenv.config()
@@ -55,6 +63,75 @@ usedPrefix.length
 const command =
 args.shift()
 ?.toLowerCase()
+
+const userId =
+ctx.from.id
+
+// REGISTER NAME 😭🔥
+if(
+waitingRegister.has(
+userId
+)
+) {
+
+const nickname =
+text.trim()
+
+// ADA SPASI 😭🔥
+if(
+nickname.includes(' ')
+) {
+
+return ctx.reply(
+
+'Nickname tidak boleh pakai spasi'
+
+)
+
+}
+
+// KEPENDEKAN 😭🔥
+if(
+nickname.length < 3
+) {
+
+return ctx.reply(
+
+'Nickname minimal 3 huruf'
+
+)
+
+}
+
+waitingRegister.delete(
+userId
+)
+
+// LOADING 😭🔥
+await loading(ctx)
+
+return ctx.reply(
+
+`berhasil daftar ✔️
+
+👤 Nickname:
+${nickname}
+
+⭐ Level:
+1
+
+💰 Gold:
+100
+
+❤️ Nyawa:
+100
+
+🔮 Mana:
+50`
+
+)
+
+}
 
 // START 😭🔥
 if(
