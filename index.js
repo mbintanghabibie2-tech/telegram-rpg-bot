@@ -1,36 +1,21 @@
-import { Bot }
-from 'grammy'
+import { Bot } from 'grammy'
 
-import dotenv
-from 'dotenv'
+import dotenv from 'dotenv'
 dotenv.config()
 
 import {
 startCommand
-}
-from './commands/start.js'
+} from './commands/start.js'
 
 import {
-registerCommand
-}
-from './commands/register.js'
-
-import {
-waitingRegister 
-}
-from './commands/register.js'
-
-import {
+registerCommand,
+waitingRegister,
 createPlayer
-}
-from './commands/register.js'
+} from './commands/register.js'
 
 import {
 loading
-}
-from './systems/animation.js'
-
-dotenv.config()
+} from './systems/animation.js'
 
 const bot =
 new Bot(
@@ -48,77 +33,65 @@ async (ctx) => {
 const text =
 ctx.message.text
 
-const usedPrefix =
-prefixes.find(
-p =>
-text.startsWith(p)
-)
-
-if(
-!usedPrefix
-) return
-
-const args =
-text
-.slice(
-usedPrefix.length
-)
-.trim()
-.split(/ +/)
-
-const command =
-args.shift()
-?.toLowerCase()
-
 const userId =
 ctx.from.id
 
+// =====================
 // REGISTER NAME 😭🔥
-if(
-waitingRegister.has(
-userId
-)
+// =====================
+
+if (
+waitingRegister.has(userId)
 ) {
 
 const nickname =
 text.trim()
 
+// jangan baca command
+if (
+nickname.startsWith('/') ||
+nickname.startsWith('.') ||
+nickname.startsWith('!') ||
+nickname.startsWith('#') ||
+nickname.startsWith('?')
+) {
+return
+}
+
 // ADA SPASI 😭🔥
-if(
+if (
 nickname.includes(' ')
 ) {
 
 return ctx.reply(
-
 'Nickname tidak boleh pakai spasi'
-
 )
 
 }
 
 // KEPENDEKAN 😭🔥
-if(
+if (
 nickname.length < 3
 ) {
 
 return ctx.reply(
-
 'Nickname minimal 3 huruf'
-
 )
 
 }
 
-waitingRegister.delete(
-userId
-)
-
 // LOADING 😭🔥
 await loading(ctx)
 
+// BUAT PLAYER 😭🔥
 await createPlayer(
 ctx,
 nickname
+)
+
+// HAPUS WAITING 😭🔥
+waitingRegister.delete(
+userId
 )
 
 return ctx.reply(
@@ -144,14 +117,36 @@ ${nickname}
 
 }
 
+// =====================
+// PREFIX COMMAND 😭🔥
+// =====================
+
+const usedPrefix =
+prefixes.find(
+p =>
+text.startsWith(p)
+)
+
+if (!usedPrefix) return
+
+const args =
+text
+.slice(
+usedPrefix.length
+)
+.trim()
+.split(/ +/)
+
+const command =
+args.shift()
+?.toLowerCase()
+
 // START 😭🔥
-if(
+if (
 command === 'start'
 ) {
 
-return startCommand(
-ctx
-)
+return startCommand(ctx)
 
 }
 
@@ -172,3 +167,7 @@ ctx
 )
 
 bot.start()
+
+console.log(
+'BOT ONLINE 😭🔥'
+)
