@@ -20,9 +20,14 @@ waitingRegister
 from './commands/register.js'
 
 import {
-loading
+createPlayer
 }
 from './commands/register.js'
+
+import {
+loading
+}
+from './systems/animation.js'
 
 dotenv.config()
 
@@ -109,6 +114,11 @@ userId
 
 // LOADING 😭🔥
 await loading(ctx)
+
+await createPlayer(
+ctx,
+nickname
+)
 
 return ctx.reply(
 
