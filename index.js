@@ -3,6 +3,7 @@ from 'grammy'
 
 import dotenv
 from 'dotenv'
+dotenv.config()
 
 import {
 startCommand
