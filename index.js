@@ -1,12 +1,28 @@
-import { Bot, InlineKeyboard } from 'grammy'
-import dotenv from 'dotenv'
+import { Bot }
+from 'grammy'
+
+import dotenv
+from 'dotenv'
+
+import {
+startCommand
+}
+
+from './commands/start.js'
+
+import {
+registerCommand
+}
+
+from './commands/register.js'
 
 dotenv.config()
 
 const bot =
-new Bot(process.env.BOT_TOKEN)
+new Bot(
+process.env.BOT_TOKEN
+)
 
-// PREFIX 😭🔥
 const prefixes =
 ['.', '/', '!', '#', '?']
 
@@ -18,17 +34,16 @@ async (ctx) => {
 const text =
 ctx.message.text
 
-// CEK PREFIX 😭🔥
 const usedPrefix =
 prefixes.find(
-p => text.startsWith(p)
+p =>
+text.startsWith(p)
 )
 
 if(
 !usedPrefix
 ) return
 
-// ARGUMENT 😭🔥
 const args =
 text
 .slice(
@@ -38,31 +53,16 @@ usedPrefix.length
 .split(/ +/)
 
 const command =
-args.shift()?.toLowerCase()
+args.shift()
+?.toLowerCase()
 
 // START 😭🔥
 if(
 command === 'start'
 ) {
 
-const keyboard =
-new InlineKeyboard()
-.text(
-'Daftar Sekarang',
-'register'
-)
-
-return ctx.reply(
-
-`Hei. disini kamu bisa memainkan game seru,
-
-daftar terlebih dahulu sebelum memainkannya!`,
-
-{
-reply_markup:
-keyboard
-}
-
+return startCommand(
+ctx
 )
 
 }
@@ -70,24 +70,17 @@ keyboard
 }
 )
 
-// BUTTON REGISTER 😭🔥
+// BUTTON 😭🔥
 bot.callbackQuery(
 'register',
 
 async (ctx) => {
 
-await ctx.reply(
-
-`daftar dulu dengan format dibawah!
-
-nama_kamu
-
-tanpa spasi ya`
-
+return registerCommand(
+ctx
 )
 
 }
-
 )
 
 bot.start()
